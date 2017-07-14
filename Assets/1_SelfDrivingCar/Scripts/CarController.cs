@@ -4,11 +4,10 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityStandardAssets.Vehicles.Car;
 
 
 
-namespace UnityStandardAssets.Vehicles.Car
-{
     internal enum CarDriveType
     {
         FrontWheelDrive,
@@ -52,7 +51,9 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] private Camera LeftCamera;
         [SerializeField] private Camera RightCamera;
 
-        private Quaternion[] m_WheelMeshLocalRotations;
+		[SerializeField] private Lidar lidar;
+
+		private Quaternion[] m_WheelMeshLocalRotations;
         private Vector3 m_Prevpos, m_Pos;
         private float m_SteerAngle;
         private int m_GearNum;
@@ -411,6 +412,7 @@ namespace UnityStandardAssets.Vehicles.Car
 		//instead of showing frozen screen until all data is recorded
 		public IEnumerator WriteSamplesToDisk()
 		{
+			Debug.Log("WriteSamplesToDisk");
 			yield return new WaitForSeconds(0.000f); //retrieve as fast as we can but still allow communication of main thread to screen and UISystem
 			if (carSamples.Count > 0) {
 				//pull off a sample from the que
@@ -421,13 +423,19 @@ namespace UnityStandardAssets.Vehicles.Car
 				transform.rotation = sample.rotation;
 
 				// Capture and Persist Image
-				string centerPath = WriteImage (CenterCamera, "center", sample.timeStamp);
-				string leftPath = WriteImage (LeftCamera, "left", sample.timeStamp);
-				string rightPath = WriteImage (RightCamera, "right", sample.timeStamp);
+				//string centerPath = WriteImage (CenterCamera, "center", sample.timeStamp);
+				//string leftPath = WriteImage (LeftCamera, "left", sample.timeStamp);
+				//string rightPath = WriteImage (RightCamera, "right", sample.timeStamp);
 
-				string row = string.Format ("{0},{1},{2},{3},{4},{5},{6}\n", centerPath, leftPath, rightPath, sample.steeringAngle, sample.throttle, sample.brake, sample.speed);
-				File.AppendAllText (Path.Combine (m_saveLocation, CSVFileName), row);
-			}
+                // capture lidar image
+				string lidarPath = WriteLidarData(lidar, "lidar", sample.timeStamp);
+
+                if (lidarPath != null)
+                {
+                    string row = string.Format("{0},{1},{2},{3},{4}\n", lidarPath, sample.steeringAngle, sample.throttle, sample.brake, sample.speed);
+                    File.AppendAllText(Path.Combine(m_saveLocation, CSVFileName), row);
+                }
+            }
 			if (carSamples.Count > 0) {
 				//request if there are more samples to pull
 				StartCoroutine(WriteSamplesToDisk()); 
@@ -460,6 +468,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         public IEnumerator Sample()
         {
+			Debug.Log("Sample");
             // Start the Coroutine to Capture Data Every Second.
             // Persist that Information to a CSV and Perist the Camera Frame
             yield return new WaitForSeconds(0.0666666666666667f);
@@ -513,17 +522,44 @@ namespace UnityStandardAssets.Vehicles.Car
             image = null;
             return path;
         }
-    }
 
-    internal class CarSample
-    {
-        public Quaternion rotation;
-        public Vector3 position;
-        public float steeringAngle;
-        public float throttle;
-        public float brake;
-        public float speed;
-        public string timeStamp;
-    }
+		private string WriteLidarData(Lidar lidar, string prepend, string timestamp)
+		{
+		// lidar.Render();
+		// RenderTexture targetTexture = camera.targetTexture;
 
+		// RenderTexture.active = targetTexture;
+		// Texture2D texture2D = new Texture2D(targetTexture.width, targetTexture.height, TextureFormat.RGB24, false);
+		// texture2D.ReadPixels(new Rect(0, 0, targetTexture.width, targetTexture.height), 0, 0);
+		// texture2D.Apply();
+		// byte[] image = texture2D.EncodeToJPG();
+		// UnityEngine.Object.DestroyImmediate(texture2D);
+		// string directory = Path.Combine(m_saveLocation, DirFrames);
+		// string path = Path.Combine(directory, prepend + "_" + timestamp + ".jpg");
+		// File.WriteAllBytes(path, image);
+		// image = null;
+		// return path;
+		byte[] image = null;
+		if (lidar.TryRenderPointCloud(out image)) {
+            string directory = Path.Combine(m_saveLocation, DirFrames);
+            string path = Path.Combine(directory, prepend + "_" + timestamp + ".jpg");
+            File.WriteAllBytes(path, image);
+            image = null;
+            return path;
+        }
+
+        return null;
+    }
 }
+
+internal class CarSample
+{
+    public Quaternion rotation;
+    public Vector3 position;
+    public float steeringAngle;
+    public float throttle;
+    public float brake;
+    public float speed;
+    public string timeStamp;
+}
+
