@@ -12607,8 +12607,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a9b38ffe999d45eb8670c704853d686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotateFrequency: 1
-  SampleFrequency: 40
+  RotateFrequency: 0.5
+  SampleFrequency: 20
   Channels: 32
   MaximalVerticalFOV: 0
   MinimalVerticalFOV: -30
