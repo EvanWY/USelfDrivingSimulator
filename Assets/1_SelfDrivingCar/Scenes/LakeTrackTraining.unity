@@ -1662,40 +1662,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114000011847512630, guid: 0fb4610dba67fc24cb2a6674fb155fc1,
-        type: 2}
-      propertyPath: circuit
-      value: 
-      objectReference: {fileID: 1932927585}
     - target: {fileID: 100064, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
       propertyPath: m_Name
       value: CarTraining
       objectReference: {fileID: 0}
-    - target: {fileID: 11400020, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
-      propertyPath: lidar
+    - target: {fileID: 114018108379152822, guid: 0fb4610dba67fc24cb2a6674fb155fc1,
+        type: 2}
+      propertyPath: rawImage
       value: 
-      objectReference: {fileID: 1772611936}
-    - target: {fileID: 1000013140725996, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1000012627941922, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1000011449295276, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114000013168730212, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
-    - {fileID: 114000011847512630, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
+      objectReference: {fileID: 1850543282}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &252181946 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400064, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
-  m_PrefabInternal: {fileID: 252181945}
 --- !u!1001 &268727389
 Prefab:
   m_ObjectHideFlags: 0
@@ -12580,55 +12558,6 @@ BoxCollider:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: c92bea14e5c4591408be760558da7b90, type: 3}
   m_PrefabInternal: {fileID: 1769730907}
---- !u!1 &1772611935
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1772611937}
-  - component: {fileID: 1772611936}
-  m_Layer: 0
-  m_Name: Lidar
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1772611936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1772611935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a9b38ffe999d45eb8670c704853d686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RotateFrequency: 0.1
-  SampleFrequency: 30
-  Channels: 16
-  MaximalVerticalFOV: 0
-  MinimalVerticalFOV: -30
-  MeasurementRange: 120
-  MeasurementAccuracy: 0.02
-  lastImage: {fileID: 0}
-  rawImage: {fileID: 1850543282}
---- !u!4 &1772611937
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1772611935}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 2.14, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 252181946}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &1777517437
 Prefab:
   m_ObjectHideFlags: 0

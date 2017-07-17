@@ -99,7 +99,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			TryComposeTexture();
 		}
 
-		public void RenderSlice(float horizontalAngle, out LaserSliceData outSlice)
+		void RenderSlice(float horizontalAngle, out LaserSliceData outSlice)
 		{
 			LaserData[] lasers = new LaserData[Channels];
 
