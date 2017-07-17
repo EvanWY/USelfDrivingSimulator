@@ -51,7 +51,7 @@ using UnityStandardAssets.Vehicles.Car;
         [SerializeField] private Camera LeftCamera;
         [SerializeField] private Camera RightCamera;
 
-		[SerializeField] private Lidar lidar;
+		[SerializeField] private LidarV2 lidar;
 
 		private Quaternion[] m_WheelMeshLocalRotations;
         private Vector3 m_Prevpos, m_Pos;
@@ -523,7 +523,7 @@ using UnityStandardAssets.Vehicles.Car;
             return path;
         }
 
-		private string WriteLidarData(Lidar lidar, string prepend, string timestamp)
+		private string WriteLidarData(LidarV2 lidar, string prepend, string timestamp)
 		{
 		// lidar.Render();
 		// RenderTexture targetTexture = camera.targetTexture;

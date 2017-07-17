@@ -2126,7 +2126,7 @@ MonoBehaviour:
   CenterCamera: {fileID: 20000011327949428}
   LeftCamera: {fileID: 20000011124301124}
   RightCamera: {fileID: 20000013690046254}
-  lidar: {fileID: 114018108379152822}
+  lidar: {fileID: 114757350270972052}
 --- !u!146 &14600000
 WheelCollider:
   m_ObjectHideFlags: 1
@@ -4953,7 +4953,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4369603050344860}
-  - component: {fileID: 114018108379152822}
+  - component: {fileID: 114757350270972052}
   m_Layer: 0
   m_Name: Lidar
   m_TagString: Untagged
@@ -5252,7 +5252,7 @@ MonoBehaviour:
   maxRolloffDistance: 500
   dopplerLevel: 1
   useDoppler: 1
---- !u!114 &114018108379152822
+--- !u!114 &114757350270972052
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -5260,7 +5260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1434489552363722}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a9b38ffe999d45eb8670c704853d686, type: 3}
+  m_Script: {fileID: 11500000, guid: 75ae52eddef144f7d981fa0cdc6f4acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RotateFrequency: 0.1
