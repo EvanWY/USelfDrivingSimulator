@@ -16,10 +16,13 @@
 			uniform float _Fov;
  
 			fixed4 frag (v2f_img i) : COLOR {	
-				i.uv = (i.uv * 2) - 1;
 				float ang = _Fov * 0.5;
+				
+				i.uv = (i.uv * 2) - 1;
+				
 				i.uv.x = tan(ang*i.uv.x) / tan(ang);
 				i.uv.y = tan(ang*i.uv.y) / tan(ang);
+				
 				i.uv = (i.uv * 0.5) + 0.5;
 
 				float4 c = tex2D(_MainTex, i.uv);
