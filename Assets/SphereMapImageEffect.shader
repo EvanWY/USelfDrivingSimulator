@@ -24,20 +24,26 @@
 				float phi = fov * i.uv.x;
 				float theta = fov * i.uv.y;
 
-				float tanTheta = tan(theta);
-				float tanPhi = tan(phi);
+				float tanFov = tan(fov);
 
-				float sqTanTheta = tanTheta * tanTheta;
-				float sqTanPhi = tanPhi * tanPhi;
+				i.uv.x = tan(phi) / tanFov;
+				i.uv.y = tan(theta) / (cos(phi) * sqrt(2 * tanFov * tanFov));
 
-				float sqTanFovMul2 = 2 * tan(fov) * tan(fov);
+				// float tanTheta = tan(theta);
+				// float tanPhi = tan(phi);
+
+				// float sqTanTheta = tanTheta * tanTheta;
+				// float sqTanPhi = tanPhi * tanPhi;
+
+				// float sqTanFovMul2 = 2 * tan(fov) * tan(fov);
 				
-				i.uv.x = tan(phi) / tan(fov);
+				// i.uv.x = tan(phi) / tan(fov);
 
-				float h = 1 / sqrt(1 + sqTanFovMul2);
-				float a = h / cos(phi);
-				float sinDiag = sqrt(1 - (1 / (1 + sqTanFovMul2)));
-				i.uv.y = a * tanTheta / sinDiag;
+				// float h = 1 / sqrt(1 + sqTanFovMul2);
+				// float a = h / cos(phi);
+				// float sinDiag = sqrt(1 - (1 / (1 + sqTanFovMul2)));
+
+				// i.uv.y = a * tanTheta / sinDiag;
 				
 				 
 				// scale back to [0,1] from [-1,1]

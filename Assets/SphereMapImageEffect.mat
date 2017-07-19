@@ -90,7 +90,7 @@ Material:
       second: 0
     - first:
         name: _Fov
-      second: 0.666
+      second: 60
     - first:
         name: _GlossMapScale
       second: 1
