@@ -5,17 +5,20 @@
 	}
 	SubShader {
 		Pass {
+	  		ZTest Always Cull Off ZWrite Off
 			CGPROGRAM
 			#pragma vertex vert_img
-			#pragma fragment frag
+			#pragma fragment frag_sphere_mapping
 			#include "UnityCG.cginc"
 		
 			uniform sampler2D _MainTex;
-			uniform sampler2D _MaskTex;
+
+			sampler2D _CameraDepthNormalsTexture;
+			sampler2D_float _CameraDepthTexture;
 
 			uniform float _Fov;
  
-			fixed4 frag (v2f_img i) : COLOR {	
+			fixed4 frag_sphere_mapping (v2f_img i) : COLOR {	
 				float fov = 3.14159 * _Fov / 360;
 
 				// scale from [0,1] to [-1,1]
@@ -28,29 +31,15 @@
 
 				i.uv.x = tan(phi) / tanFov;
 				i.uv.y = tan(theta) / (cos(phi) * sqrt(2 * tanFov * tanFov));
-
-				// float tanTheta = tan(theta);
-				// float tanPhi = tan(phi);
-
-				// float sqTanTheta = tanTheta * tanTheta;
-				// float sqTanPhi = tanPhi * tanPhi;
-
-				// float sqTanFovMul2 = 2 * tan(fov) * tan(fov);
-				
-				// i.uv.x = tan(phi) / tan(fov);
-
-				// float h = 1 / sqrt(1 + sqTanFovMul2);
-				// float a = h / cos(phi);
-				// float sinDiag = sqrt(1 - (1 / (1 + sqTanFovMul2)));
-
-				// i.uv.y = a * tanTheta / sinDiag;
-				
 				 
 				// scale back to [0,1] from [-1,1]
 				i.uv = (i.uv * 0.5) + 0.5;
 
-				float4 c = tex2D(_MainTex, i.uv);
-				return c;
+				float c = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
+
+				return 2 / (1+ exp(-10 * c)) - 1;
+
+				//return c;
 			}
 			ENDCG
 		}

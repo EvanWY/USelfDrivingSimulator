@@ -1632,7 +1632,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400064, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 114.89
+      value: 123.37
       objectReference: {fileID: 0}
     - target: {fileID: 400064, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1640,7 +1640,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400064, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 157.26
+      value: 151.4
       objectReference: {fileID: 0}
     - target: {fileID: 400064, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
       propertyPath: m_LocalRotation.x
@@ -7158,6 +7158,10 @@ Prefab:
       propertyPath: m_ReflectionProbeUsage
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 9485b0c79d11e2e4d0007da98d76c639, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9485b0c79d11e2e4d0007da98d76c639, type: 2}
   m_IsPrefabParent: 0
@@ -11358,26 +11362,25 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1612224710}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.67960864, z: -0, w: -0.7335749}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1257274176}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 274.374, z: 0}
 --- !u!114 &1612224712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1612224710}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 431df7a002c124441b65498577db9163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ffdffb5e1bd30564e9d909c281227028, type: 2}
-  ri: {fileID: 0}
 --- !u!20 &1612224713
 Camera:
   m_ObjectHideFlags: 0
@@ -11394,9 +11397,9 @@ Camera:
     y: 0
     width: 1.76
     height: 1
-  near clip plane: 0.3
-  far clip plane: 120
-  field of view: 60
+  near clip plane: 1
+  far clip plane: 20
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
