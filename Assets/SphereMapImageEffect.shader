@@ -37,11 +37,12 @@
 				// scale back to [0,1] from [-1,1]
 				i.uv = (i.uv * 0.5) + 0.5;
 
-				float c = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
+				//float4 c = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
+				float4 c = tex2D(_MainTex, i.uv);
 
-				return 2 / (1+ exp(-10 * c)) - 1;
+				//return 2 / (1+ exp(-10 * c)) - 1;
 
-				//return c;
+				return c;
 			}
 			ENDCG
 		}
