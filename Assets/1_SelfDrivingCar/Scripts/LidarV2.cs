@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LidarV2 : MonoBehaviour
 {
+	public Camera DepthCamera;
+	public LidarV2DepthCamera LidarV2DepthCameraObject;
 
 	public float RotateFrequency = 20;
 
@@ -18,12 +20,13 @@ public class LidarV2 : MonoBehaviour
 
 	public float MeasurementRange = 120f;
 	public float MeasurementAccuracy = 0.02f;
-
-	public List<LaserSliceData> data = new List<LaserSliceData>();
+	
 	int CloudWidth;
 
-	public Texture2D lastImage = null;
-	bool imageRendered;
+	public Queue<Texture2D> imageQueue = new Queue<Texture2D>();
+	Texture2D lastImage;
+
+	Texture2D nextImage;
 
 	public RawImage rawImage;
 
@@ -31,143 +34,78 @@ public class LidarV2 : MonoBehaviour
 	{
 		CloudWidth = Mathf.RoundToInt(SampleFrequency / RotateFrequency);
 		lastImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
-		imageRendered = false;
+		nextImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
 
 		rawImage.texture = lastImage;
 	}
 
 	public bool TryRenderPointCloud(out byte[] image)
 	{
-		if (imageRendered != false)
-		{
-			image = lastImage.EncodeToJPG();
-			//UnityEngine.Object.DestroyImmediate(lastImage);
-			imageRendered = false;
-			return true;
+		if (imageQueue.Count < 2) {
+			image = null;
+			return false;
 		}
 
-		image = null;
-		return false;
+		while (imageQueue.Count >= 2)
+		{
+			lastImage = imageQueue.Dequeue();
+		}
+		image = lastImage.EncodeToJPG();
+		lastImage.Apply();
+
+		return true;
 	}
 
-	void TryComposeTexture()
-	{
-		while (data.Count >= CloudWidth * 2)
-		{
-			data.RemoveRange(0, CloudWidth);
-		}
-
-		if (data.Count >= CloudWidth)
-		{
-			//lastImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
-			for (int i = 0; i < CloudWidth; i++)
-			{
-				for (int j = 0; j < Channels; j++)
-				{
-					float val = (data[i].Lasers[j].distance / MeasurementRange);
-
-					val = 2f / (1f + Mathf.Exp(-10f * val)) - 1f;
-
-					lastImage.SetPixel(i, j, new Color(0, val, 0));
-				}
-			}
-
-			lastImage.Apply();
-			imageRendered = true;
-		}
-	}
+	int nextStartColumns = 0;
 
 	void Update()
 	{
-		if (data.Count > 0)
-		{
-			LaserSliceData lastSlice = data[data.Count - 1];
-			float lastTimeStamp = lastSlice.Timestamp;
+		int sampleCount = Mathf.FloorToInt(SampleFrequency * Time.deltaTime);
 
-			float deltaTime = (Time.time - lastTimeStamp);
+		// theta is the angle of the diag
+		float currCamTheta = Mathf.Atan((Mathf.Tan(DepthCamera.fieldOfView / 2) / Mathf.Sqrt(2f)));
 
-			int sampleCount = Mathf.FloorToInt(SampleFrequency * deltaTime);
-
-			int currIdx = data.Count - 1;
-			for (int i = 1; i <= sampleCount; i++)
-			{
-				LaserSliceData temp;
-				RenderSlice(Mathf.LerpUnclamped(0, 360, (currIdx + i) / (float)CloudWidth), out temp);
-				data.Add(temp);
-			}
-
+		Render(ref nextImage, ref nextStartColumns, ref sampleCount, currCamTheta);
+		
+		while (sampleCount > 0) {
+			imageQueue.Enqueue(nextImage);
+			nextImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
+			Render(ref nextImage, ref nextStartColumns, ref sampleCount, currCamTheta);
 		}
-		else
-		{
-			LaserSliceData temp;
-			RenderSlice(0, out temp);
-			data.Add(temp);
-		}
-
-		TryComposeTexture();
 	}
 
-	void RenderSlice(float horizontalAngle, out LaserSliceData outSlice)
-	{
-		LaserData[] lasers = new LaserData[Channels];
+	// return successfully rendered fragment width
+	void Render(ref Texture2D targetImage, ref int imgHorizontalPixelStart, ref int sampleCount, float currCamTheta) {
+		float maxCamRenderHorizontalAngle = DepthCamera.fieldOfView;
+		int maxCamRenderWidth = Mathf.FloorToInt((maxCamRenderHorizontalAngle / 360) * CloudWidth);
 
-		for (int i = 0; i < Channels; i++)
-		{
-			float verticalAngel = -Mathf.Lerp(MinimalVerticalFOV, MaximalVerticalFOV, (i / (float)(Channels - 1)));
 
-			RaycastHit hit;
-
-			float dist;
-
-			//Debug.LogFormat("verticalAngel : {0}, Vector: {1}", verticalAngel, Quaternion.Euler(verticalAngel, 0, 0) * Vector3.forward);
-
-			Vector3 fwd = transform.TransformDirection(Quaternion.Euler(verticalAngel, horizontalAngle, 0) * Vector3.forward);
-			if (Physics.Raycast(transform.position, fwd, out hit, MeasurementRange))
-			{
-				dist = hit.distance + Random.Range(-MeasurementAccuracy, MeasurementAccuracy);
-				dist = Mathf.Clamp(dist, 0, MeasurementRange);
-
-				Debug.DrawLine(transform.position, hit.point, Color.green);
-				Debug.DrawLine(hit.point - Vector3.up * 0.3f, hit.point + Vector3.up * 0.3f, Color.red, 0, false);
-				Debug.DrawLine(hit.point - Vector3.left * 0.3f, hit.point + Vector3.left * 0.3f, Color.red, 0, false);
-				Debug.DrawLine(hit.point - Vector3.forward * 0.3f, hit.point + Vector3.forward * 0.3f, Color.red, 0, false);
-			}
-			else
-			{
-				dist = MeasurementRange;
-				Debug.DrawRay(transform.position, fwd, Color.gray);
-			}
-
-			//Debug.LogFormat(dist.ToString());
-
-			lasers[i] = new LaserData()
-			{
-				distance = dist,
-			};
+		while (maxCamRenderWidth < sampleCount && imgHorizontalPixelStart + maxCamRenderWidth < CloudWidth) {
+			// render a whole camera
+			ExecuteRender(maxCamRenderWidth, ref imgHorizontalPixelStart, ref sampleCount, maxCamRenderWidth, currCamTheta);
 		}
 
-		LaserSliceData laserSliceData = new LaserSliceData()
-		{
-			RotationalPosition = horizontalAngle,
-			Timestamp = Time.time,
-			Lasers = lasers,
-		};
+		int renderWidth = Mathf.Min(sampleCount, CloudWidth - imgHorizontalPixelStart);
+		ExecuteRender(renderWidth, ref imgHorizontalPixelStart, ref sampleCount, maxCamRenderWidth, currCamTheta);
 
-		outSlice = laserSliceData;
 	}
 
-	public struct LaserData
-	{
-		public float distance;
-		public float intensity;
-	}
+	void ExecuteRender(int renderWidth, ref int imgHorizontalPixelStart, ref int sampleCount, int maxCamRenderWidth, float currCamTheta) {
+		DepthCamera.transform.localEulerAngles = Vector3.up * Mathf.LerpUnclamped(0, 360, (imgHorizontalPixelStart + 0.5f * renderWidth) / (float)(CloudWidth));
+		DepthCamera.Render();
+		Texture2D scaledTex = new Texture2D(DepthCamera.targetTexture.width, DepthCamera.targetTexture.height);
+		Graphics.CopyTexture(DepthCamera.targetTexture, scaledTex);
+		int maxCamRenderHeight = Mathf.RoundToInt(currCamTheta * Channels / (MaximalVerticalFOV - MinimalVerticalFOV));
+		TextureScaler.scale(scaledTex, maxCamRenderWidth, maxCamRenderHeight);
 
-	public struct LaserSliceData
-	{
+		int srcX = (maxCamRenderWidth - renderWidth) / 2;
+		int srcY = Mathf.RoundToInt(maxCamRenderHeight * (MinimalVerticalFOV + currCamTheta) / (currCamTheta + currCamTheta));
+		Graphics.CopyTexture(scaledTex, 0, 0, srcX, srcY, renderWidth, Channels, nextImage, 0, 0, imgHorizontalPixelStart, 0);
 
-		public float RotationalPosition;
-		public LaserData[] Lasers;
-		public float Timestamp;
+		sampleCount -= renderWidth;
+		imgHorizontalPixelStart += renderWidth;
 	}
 
 }
+
+

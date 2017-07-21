@@ -943,8 +943,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100064}
-  m_LocalRotation: {x: -0, y: 0.061945744, z: -0, w: 0.99807954}
-  m_LocalPosition: {x: 179.81, y: 2.43, z: 89.86}
+  m_LocalRotation: {x: -0, y: -0.61036354, z: -0, w: 0.79212147}
+  m_LocalPosition: {x: 123.37, y: 2.43, z: 151.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000010519860608}
@@ -960,7 +960,7 @@ Transform:
   - {fileID: 4369603050344860}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 6.9080005, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -75.232, z: 0}
 --- !u!23 &2300000
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -4945,6 +4945,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &1422036288321996
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4501125313694754}
+  - component: {fileID: 20944797426015980}
+  - component: {fileID: 114745792511247882}
+  m_Layer: 0
+  m_Name: DepthCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1434489552363722
 GameObject:
   m_ObjectHideFlags: 0
@@ -5022,10 +5039,24 @@ Transform:
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 2.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4501125313694754}
   m_Father: {fileID: 400064}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!4 &4501125313694754
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1422036288321996}
+  m_LocalRotation: {x: 0, y: -0.9834136, z: 0, w: 0.18137737}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4369603050344860}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -159.1, z: 0}
 --- !u!20 &20000010189154420
 Camera:
   m_ObjectHideFlags: 1
@@ -5162,6 +5193,40 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!20 &20944797426015980
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1422036288321996}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.01
+  far clip plane: 40
+  field of view: 80
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: ace832d034e7b470a892dd932c008dd1, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!81 &81000010209231204
 AudioListener:
   m_ObjectHideFlags: 1
@@ -5252,6 +5317,18 @@ MonoBehaviour:
   maxRolloffDistance: 500
   dopplerLevel: 1
   useDoppler: 1
+--- !u!114 &114745792511247882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1422036288321996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431df7a002c124441b65498577db9163, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: ffdffb5e1bd30564e9d909c281227028, type: 2}
 --- !u!114 &114757350270972052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5263,6 +5340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ae52eddef144f7d981fa0cdc6f4acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DepthCamera: {fileID: 20944797426015980}
+  LidarV2DepthCameraObject: {fileID: 114745792511247882}
   RotateFrequency: 0.1
   SampleFrequency: 30
   Channels: 16
@@ -5270,7 +5349,6 @@ MonoBehaviour:
   MinimalVerticalFOV: -30
   MeasurementRange: 120
   MeasurementAccuracy: 0.02
-  lastImage: {fileID: 0}
   rawImage: {fileID: 0}
 --- !u!124 &124000011269762154
 Behaviour:

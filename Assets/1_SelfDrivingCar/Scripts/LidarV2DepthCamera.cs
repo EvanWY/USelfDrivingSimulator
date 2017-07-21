@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//[ExecuteInEditMode]
+[ExecuteInEditMode]
 public class LidarV2DepthCamera : MonoBehaviour {
 
     public Material material;
@@ -15,10 +15,7 @@ public class LidarV2DepthCamera : MonoBehaviour {
 
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        Graphics.Blit(source, destination, material);
-	}
-
-	void Update() {
-		transform.Rotate(Vector3.up * 30 * Time.deltaTime);
+		material.SetFloat("_Fov", GetComponent<Camera>().fieldOfView);
+		Graphics.Blit(source, destination, material);
 	}
 }
