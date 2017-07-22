@@ -61,14 +61,22 @@ public class LidarV2 : MonoBehaviour
 		// theta is the angle of the diag
 		float currCamTheta = Mathf.Rad2Deg * Mathf.Atan((Mathf.Tan(Mathf.Deg2Rad * DepthCamera.fieldOfView / 2) / Mathf.Sqrt(2f)));
 
+		int frameRenderCounter = 0;
+
 		Render(ref nextImage, ref nextStartColumns, ref sampleCount, currCamTheta);
+		frameRenderCounter++;
 		
 		while (sampleCount > 0) {
 			nextImage.Apply();
 			lastImage = nextImage;
 			nextImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
 			Render(ref nextImage, ref nextStartColumns, ref sampleCount, currCamTheta);
+			frameRenderCounter++;
 		}
+
+		Debug.LogFormat("DeltaTime:{0}, RenderTimes:{1}", Time.deltaTime, frameRenderCounter);
+
+
 	}
 
 	// return successfully rendered fragment width
@@ -97,8 +105,7 @@ public class LidarV2 : MonoBehaviour
 		readRenderTex.Apply();
 
 		int maxCamRenderHeight = Mathf.RoundToInt(2 * currCamTheta * Channels / (MaximalVerticalFOV - MinimalVerticalFOV));
-		Debug.Log(maxCamRenderWidth + " " + maxCamRenderHeight + " " + currCamTheta);
-		//TextureScaler.scale(readRenderTex, maxCamRenderWidth, maxCamRenderHeight);
+		//Debug.Log(maxCamRenderWidth + " " + maxCamRenderHeight + " " + currCamTheta);
 		scaledImage = TextureScaler.scaled(readRenderTex, maxCamRenderWidth, maxCamRenderHeight);
 		scaledImage.Apply();
 
@@ -106,7 +113,7 @@ public class LidarV2 : MonoBehaviour
 		int srcY = Mathf.RoundToInt(maxCamRenderHeight * (MinimalVerticalFOV + currCamTheta) / (currCamTheta + currCamTheta));
 		Graphics.CopyTexture(scaledImage, 0, 0, srcX, srcY, renderWidth, Channels, targetImage, 0, 0, imgHorizontalPixelStart, 0);
 		
-		Debug.Log(srcX + " " + srcY + " " + renderWidth + " " + imgHorizontalPixelStart);
+		//Debug.Log(srcX + " " + srcY + " " + renderWidth + " " + imgHorizontalPixelStart);
 
 		sampleCount -= renderWidth;
 		imgHorizontalPixelStart += renderWidth;

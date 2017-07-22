@@ -5211,7 +5211,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 40
-  field of view: 80
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -5342,14 +5342,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DepthCamera: {fileID: 20944797426015980}
   LidarV2DepthCameraObject: {fileID: 114745792511247882}
-  RotateFrequency: 0.1
-  SampleFrequency: 30
-  Channels: 16
-  MaximalVerticalFOV: 0
-  MinimalVerticalFOV: -30
+  RotateFrequency: 5
+  SampleFrequency: 20000
+  Channels: 64
+  MaximalVerticalFOV: 0.2
+  MinimalVerticalFOV: -24.9
   MeasurementRange: 120
   MeasurementAccuracy: 0.02
+  lastImage: {fileID: 0}
+  nextImage: {fileID: 0}
   rawImage: {fileID: 0}
+  scaledImage: {fileID: 0}
 --- !u!124 &124000011269762154
 Behaviour:
   m_ObjectHideFlags: 1
