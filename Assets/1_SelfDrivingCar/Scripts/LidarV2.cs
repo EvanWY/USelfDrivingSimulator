@@ -94,30 +94,33 @@ public class LidarV2 : MonoBehaviour
 
 	}
 
+	
 	void ExecuteRender(ref Texture2D targetImage,int renderWidth, ref int imgHorizontalPixelStart, ref int sampleCount, int maxCamRenderWidth, float currCamTheta) {
-		frameActualRenderTimes++;
+		
+		// Rotate Camera to target angle and render
 		DepthCamera.transform.localEulerAngles = Vector3.up * Mathf.LerpUnclamped(0, 360, (imgHorizontalPixelStart + 0.5f * renderWidth) / (float)(CloudWidth));
 		DepthCamera.Render();
+
+		// copy camera render texture to "readRenderTex"
 		Texture2D readRenderTex = new Texture2D(DepthCamera.targetTexture.width, DepthCamera.targetTexture.height, TextureFormat.RGB24, false);
-		
 		RenderTexture.active = DepthCamera.targetTexture;
 		readRenderTex.ReadPixels(new Rect(0, 0, DepthCamera.targetTexture.width, DepthCamera.targetTexture.height), 0, 0);
 		readRenderTex.Apply();
 
+		// scale the texture from "readRenderTex" to "scaledImage"
 		int maxCamRenderHeight = Mathf.RoundToInt(2 * currCamTheta * Channels / (MaximalVerticalFOV - MinimalVerticalFOV));
-		//Debug.Log(maxCamRenderWidth + " " + maxCamRenderHeight + " " + currCamTheta);
 		scaledImage = TextureScaler.scaled(readRenderTex, maxCamRenderWidth, maxCamRenderHeight);
 		scaledImage.Apply();
 
+		// copy texture from "scaledImage" to related area in "targetImage"
 		int srcX = (maxCamRenderWidth - renderWidth) / 2;
 		int srcY = Mathf.RoundToInt(maxCamRenderHeight * (MinimalVerticalFOV + currCamTheta) / (currCamTheta + currCamTheta));
 		Graphics.CopyTexture(scaledImage, 0, 0, srcX, srcY, renderWidth, Channels, targetImage, 0, 0, imgHorizontalPixelStart, 0);
-		
-		//Debug.Log(srcX + " " + srcY + " " + renderWidth + " " + imgHorizontalPixelStart);
 
 		sampleCount -= renderWidth;
 		imgHorizontalPixelStart += renderWidth;
 		imgHorizontalPixelStart %= CloudWidth;
+		frameActualRenderTimes++;
 	}
 
 }
