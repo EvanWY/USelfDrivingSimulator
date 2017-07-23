@@ -62,6 +62,7 @@ public class LidarV2 : MonoBehaviour
 		maxCamRenderHeight = Mathf.RoundToInt(2 * currCamTheta * Channels / (MaximalVerticalFOV - MinimalVerticalFOV));
 		DepthCamera.targetTexture = new RenderTexture(maxCamRenderWidth, maxCamRenderHeight, 24);
 		DepthCamera.targetTexture.Create();
+		DepthCamera.aspect = 1;
 	}
 
 	void Update()
