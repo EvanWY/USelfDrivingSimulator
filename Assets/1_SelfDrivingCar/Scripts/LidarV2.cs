@@ -53,6 +53,8 @@ public class LidarV2 : MonoBehaviour
 	}
 
 	int nextStartColumns = 0;
+	int frameRenderCounter = 0;
+	int frameActualRenderTimes = 0;
 
 	void Update()
 	{
@@ -61,26 +63,23 @@ public class LidarV2 : MonoBehaviour
 		// theta is the angle of the diag
 		float currCamTheta = Mathf.Rad2Deg * Mathf.Atan((Mathf.Tan(Mathf.Deg2Rad * DepthCamera.fieldOfView / 2) / Mathf.Sqrt(2f)));
 
-		int frameRenderCounter = 0;
-
+		frameRenderCounter = 0;
+		frameActualRenderTimes = 0;
 		Render(ref nextImage, ref nextStartColumns, ref sampleCount, currCamTheta);
-		frameRenderCounter++;
 		
 		while (sampleCount > 0) {
 			nextImage.Apply();
 			lastImage = nextImage;
 			nextImage = new Texture2D(CloudWidth, Channels, TextureFormat.RGB24, false);
 			Render(ref nextImage, ref nextStartColumns, ref sampleCount, currCamTheta);
-			frameRenderCounter++;
 		}
 
-		Debug.LogFormat("DeltaTime:{0}, RenderTimes:{1}", Time.deltaTime, frameRenderCounter);
-
-
+		Debug.LogFormat("DeltaTime:{0}, RenderTimes:{1}, ActualRenderTiems:{2}", Time.deltaTime, frameRenderCounter, frameActualRenderTimes);
 	}
 
 	// return successfully rendered fragment width
 	void Render(ref Texture2D targetImage, ref int imgHorizontalPixelStart, ref int sampleCount, float currCamTheta) {
+		frameRenderCounter++;
 		float maxCamRenderHorizontalAngle = DepthCamera.fieldOfView;
 		int maxCamRenderWidth = Mathf.FloorToInt((maxCamRenderHorizontalAngle / 360) * CloudWidth);
 
@@ -96,6 +95,7 @@ public class LidarV2 : MonoBehaviour
 	}
 
 	void ExecuteRender(ref Texture2D targetImage,int renderWidth, ref int imgHorizontalPixelStart, ref int sampleCount, int maxCamRenderWidth, float currCamTheta) {
+		frameActualRenderTimes++;
 		DepthCamera.transform.localEulerAngles = Vector3.up * Mathf.LerpUnclamped(0, 360, (imgHorizontalPixelStart + 0.5f * renderWidth) / (float)(CloudWidth));
 		DepthCamera.Render();
 		Texture2D readRenderTex = new Texture2D(DepthCamera.targetTexture.width, DepthCamera.targetTexture.height, TextureFormat.RGB24, false);
