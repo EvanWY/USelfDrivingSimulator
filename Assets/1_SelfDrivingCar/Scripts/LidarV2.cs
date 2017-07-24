@@ -20,7 +20,9 @@ public class LidarV2 : MonoBehaviour
 
 	public float MeasurementRange = 120f;
 	public float MeasurementAccuracy = 0.02f;
-	
+
+	public int SupersampleScale = 2;
+
 	int CloudWidth;
 
 	//public Queue<Texture2D> imageQueue = new Queue<Texture2D>();
@@ -60,9 +62,12 @@ public class LidarV2 : MonoBehaviour
 		currCamTheta = Mathf.Rad2Deg * Mathf.Atan((Mathf.Tan(Mathf.Deg2Rad * DepthCamera.fieldOfView / 2) / Mathf.Sqrt(2f)));
 		maxCamRenderWidth = Mathf.FloorToInt((DepthCamera.fieldOfView / 360) * CloudWidth);
 		maxCamRenderHeight = Mathf.RoundToInt(2 * currCamTheta * Channels / (MaximalVerticalFOV - MinimalVerticalFOV));
-		DepthCamera.targetTexture = new RenderTexture(maxCamRenderWidth, maxCamRenderHeight, 24);
+		DepthCamera.targetTexture = new RenderTexture(SupersampleScale * maxCamRenderWidth, SupersampleScale * maxCamRenderHeight, 24);
 		DepthCamera.targetTexture.Create();
 		DepthCamera.aspect = 1;
+
+		LidarV2DepthCameraObject.Fov = DepthCamera.fieldOfView;
+		LidarV2DepthCameraObject.SupersampleScale = SupersampleScale;
 	}
 
 	void Update()
@@ -109,9 +114,9 @@ public class LidarV2 : MonoBehaviour
 		DepthCamera.Render();
 
 		// copy camera render texture to "readRenderTex"
-		Texture2D readRenderTex = new Texture2D(DepthCamera.targetTexture.width, DepthCamera.targetTexture.height, TextureFormat.RGB24, false);
+		Texture2D readRenderTex = new Texture2D(maxCamRenderWidth, maxCamRenderHeight, TextureFormat.RGB24, false);
 		RenderTexture.active = DepthCamera.targetTexture;
-		readRenderTex.ReadPixels(new Rect(0, 0, DepthCamera.targetTexture.width, DepthCamera.targetTexture.height), 0, 0);
+		readRenderTex.ReadPixels(new Rect(maxCamRenderWidth * (SupersampleScale *0.5f - 0.5f), maxCamRenderHeight * (SupersampleScale *0.5f - 0.5f), maxCamRenderWidth, maxCamRenderHeight), 0, 0);
 		readRenderTex.Apply();
 
 		// copy texture from "readRenderTex" to related area in "targetImage"

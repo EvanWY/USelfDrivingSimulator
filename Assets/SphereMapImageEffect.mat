@@ -90,7 +90,7 @@ Material:
       second: 0
     - first:
         name: _Fov
-      second: 90
+      second: 0
     - first:
         name: _GlossMapScale
       second: 1
@@ -121,6 +121,9 @@ Material:
     - first:
         name: _SrcBlend
       second: 1
+    - first:
+        name: _SupersampleScale
+      second: 0
     - first:
         name: _UVSec
       second: 0
