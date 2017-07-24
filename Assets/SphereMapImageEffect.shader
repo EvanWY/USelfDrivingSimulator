@@ -41,7 +41,8 @@
 				i.uv = (i.uv * 0.5) + 0.5;
 
 				float linearDepth = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
-				float logisticDistance = 2 / (1+ exp(-10 * linearDepth)) - 1;
+				float linearDistance = linearDepth/abs(cos(phi));
+				float logisticDistance = 2 / (1+ exp(-10 * linearDistance)) - 1;
 				return logisticDistance;
 
 				//float4 c = tex2D(_MainTex, i.uv);
