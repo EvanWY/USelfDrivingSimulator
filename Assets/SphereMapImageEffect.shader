@@ -10,7 +10,7 @@
 	  		ZTest Always Cull Off ZWrite Off
 			CGPROGRAM
 			#pragma vertex vert_img
-			#pragma fragment frag_sphere_mapping
+			#pragma fragment frag
 			#include "UnityCG.cginc"
 		
 			uniform sampler2D _MainTex;
@@ -41,7 +41,7 @@
 				i.uv = (i.uv * 0.5) + 0.5;
 
 				float linearDepth = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
-				float linearDistance = linearDepth/abs(cos(phi));
+				float linearDistance = linearDepth/abs(cos(phi) * cos(theta));
 				float logisticDistance = 2 / (1+ exp(-10 * linearDistance)) - 1;
 				return logisticDistance;
 
@@ -50,24 +50,31 @@
 			}
  
 			fixed4 frag (v2f_img i) : COLOR {	
-				float fov = 3.14159 * _Fov / 360;
+				// float fov = 3.14159 * _Fov / 360;
 
-				// scale from [0,1] to [-1,1]
-				//i.uv = (i.uv * 2) - 1;
-				i.uv = (i.uv * 1 * 2) - 1;
+				// // scale from [0,1] to [-1,1]
+				// i.uv = (i.uv * 2) - 1;
 
-				float phi = fov * i.uv.x;
-				float theta = fov * i.uv.y;
+				// float phi = fov * i.uv.x;
+				// float theta = fov * i.uv.y;
+				// float tanFov = tan(fov); 
 
-				float tanFov = tan(fov); 
-
-				i.uv.x = tan(phi) / tanFov;
-				i.uv.y = tan(theta) / (cos(phi) * tanFov);
+				// i.uv.x = tan(phi) / tanFov;
+				// i.uv.y = tan(theta) / (cos(phi) * tanFov);
 				 
-				// scale back to [0,1] from [-1,1]
-				i.uv = (i.uv * 0.5) + 0.5;
+				// // scale back to [0,1] from [-1,1]
+				// i.uv = (i.uv * 0.5) + 0.5;
 				
-				return tex2D(_MainTex, i.uv);
+				// float depth = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
+				// float distance = depth / abs( cos(phi) * cos(theta) );
+				// return distance;
+
+				// float logisticDepth = 2 / (1+ exp(-15 * linearDepth)) - 1;
+				// float logisticDistance = 2 / (1+ exp(-15 * linearDistance)) - 1;
+				// return logisticDistance;
+
+				float depth = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
+				return 2 / (1+ exp(-15 * depth)) - 1;
 			}
 			ENDCG
 		}

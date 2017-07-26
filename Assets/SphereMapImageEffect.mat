@@ -123,7 +123,7 @@ Material:
       second: 1
     - first:
         name: _SupersampleScale
-      second: 0
+      second: 1
     - first:
         name: _UVSec
       second: 0
