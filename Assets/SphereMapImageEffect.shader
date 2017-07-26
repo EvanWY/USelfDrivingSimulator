@@ -48,6 +48,27 @@
 				//float4 c = tex2D(_MainTex, i.uv);
 				//return c;
 			}
+ 
+			fixed4 frag (v2f_img i) : COLOR {	
+				float fov = 3.14159 * _Fov / 360;
+
+				// scale from [0,1] to [-1,1]
+				//i.uv = (i.uv * 2) - 1;
+				i.uv = (i.uv * 1 * 2) - 1;
+
+				float phi = fov * i.uv.x;
+				float theta = fov * i.uv.y;
+
+				float tanFov = tan(fov); 
+
+				i.uv.x = tan(phi) / tanFov;
+				i.uv.y = tan(theta) / (cos(phi) * tanFov);
+				 
+				// scale back to [0,1] from [-1,1]
+				i.uv = (i.uv * 0.5) + 0.5;
+				
+				return tex2D(_MainTex, i.uv);
+			}
 			ENDCG
 		}
 	}
