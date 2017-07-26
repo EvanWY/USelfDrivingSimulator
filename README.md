@@ -2,7 +2,11 @@
 
 This project is base on Udacity's Self-Driving Car Simulator
 
-Video Links: https://youtu.be/vMlUXHB09rY
+Project Page: http://wangyangevan.weebly.com/lidar-simulation.html
+
+Analysis Documentation: https://goo.gl/7o1z44
+
+Video: https://youtu.be/vMlUXHB09rY
 
 ## Welcome to Udacity's Self-Driving Car Simulator 
 
