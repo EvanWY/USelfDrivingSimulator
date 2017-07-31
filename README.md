@@ -15,7 +15,7 @@ Video: https://youtu.be/vMlUXHB09rY
 * Render system depth texture based LiDAR modeling.
 
 ## Next Step
-* Scoring system for unsupervised learning algorithm.
+* Scoring system for learning algorithm without driving data creating by human.
 * Support for vehicle moving.
   * Support for record and replay movement mode.
   * Support for multiplayer mode.
