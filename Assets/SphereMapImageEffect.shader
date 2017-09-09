@@ -10,7 +10,7 @@
 	  		ZTest Always Cull Off ZWrite Off
 			CGPROGRAM
 			#pragma vertex vert_img
-			#pragma fragment frag
+			#pragma fragment frag_sphere_mapping
 			#include "UnityCG.cginc"
 		
 			uniform sampler2D _MainTex;
