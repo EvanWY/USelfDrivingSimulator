@@ -1763,6 +1763,11 @@ Prefab:
       propertyPath: Fov
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 114745792511247882, guid: 0fb4610dba67fc24cb2a6674fb155fc1,
+        type: 2}
+      propertyPath: SupersampleScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0fb4610dba67fc24cb2a6674fb155fc1, type: 2}
   m_IsPrefabParent: 0
